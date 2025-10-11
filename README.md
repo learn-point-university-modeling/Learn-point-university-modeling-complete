@@ -18,7 +18,7 @@ You can access the deployed project here:
 
 ### 🔹 1. Clone the repository  
 ```bash
-git clone link
+git clone https://github.com/learn-point-university-modeling/Learn-point-university-modeling-complete.git
 cd LearnPoint-Integrative-Project
 ```
 
@@ -98,24 +98,29 @@ cd LearnPoint-Integrative-Project
 
 ## 🌟 Users
 
-**Student:** 
-- juan.perez@example.com   | 12345
+**Student** 
+- sofia.python@student.com | 12345
+- anasofiapython@tutor.com | 5423
 
 **Tutor** 
-- carlos.ramirez@example.com | 2025
+- david.js@tutor.com | 12345
+- monica.py@tutor.com | 54235423
+- santiago.py@tutor.com | 54235423
 
 ---
 ## Figma
-link
+
+https://www.figma.com/proto/9M29y307KGA6lFVnSLK88w/Prototype?node-id=1-126&t=WT6EucQzL57dxMKy-1
 
 ---
 
 ## 👥 Team Credits  
-
+- Juan Diego Murillo Rivas.
+- Santiago Restrepo Arismendy.
+- Vanessa Gomez Lopez.
  
-
 ---
 
 ## 📌 Version  
 
-- **Version 1.0.0** – Initial integrative project release  # Learn-point-university-modeling-complete
+- **Version 1.0.0** 
