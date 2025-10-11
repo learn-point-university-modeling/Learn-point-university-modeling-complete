@@ -1,5 +1,3 @@
-USE bmpde3nqhk7fj6wky6ge;
-
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
@@ -20,17 +18,17 @@ CREATE TABLE tutors (
     users_id INT,
     mode_tutoring VARCHAR(45),
     hour_price DECIMAL(10,2),
-    description_tutor VARCHAR(45),
+    description_tutor VARCHAR(100),
     FOREIGN KEY (users_id) REFERENCES users(id)
 );
 
 CREATE TABLE tutor_availability (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tutors_id INT,
-    FOREIGN KEY (tutors_id) REFERENCES tutors(id),
     days_availability SET('Mon','Tue','Wed','Thu','Fri','Sat','Sun'),
     start_availability TIME,
-    end_availability TIME
+    end_availability TIME,
+    FOREIGN KEY (tutors_id) REFERENCES tutors(id)
 );
 
 CREATE TABLE subjects (
@@ -93,14 +91,10 @@ CREATE TABLE requests (
 
 INSERT INTO users (name, last_name, age, email, password) VALUES
 ('Juan', 'Pérez', 20, 'juan.perez@example.com', '12345'),
+('Carlos', 'Ramírez', 30, 'carlos.ramirez@example.com', '2025');
 
-INSERT INTO users (name, last_name, age, email, password) VALUES
-('Carlos', 'Ramírez', 30, 'carlos.ramirez@example.com', '2025'),
-
-INSERT INTO students (users_id) VALUES
-(1),  -- Juan
+INSERT INTO students (users_id) VALUES (1);
 
 INSERT INTO tutors (users_id, mode_tutoring, hour_price, description_tutor) VALUES
-(3, 'Online', 50.00, 'Tutor de JS'),
-(4, 'Presencial', 60.00, 'Tutor de HTML5'),
-(5, 'Online', 70.00, 'Tutor de CSS');
+(2, 'Online', 50.00, 'Tutor de JavaScript'),
+(2, 'Online', 70.00, 'Tutor de CSS');
