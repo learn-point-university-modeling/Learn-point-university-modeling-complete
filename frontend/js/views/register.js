@@ -153,98 +153,89 @@ export function initRegister(navigate) {
     registerBtn.className = "button is-danger is-fullwidth";
   });
 
-  registerForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+registerForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    try {
-      // Basic required fields always present
-      const name = document.getElementById("name").value.trim();
-      const last_name = document.getElementById("last_name").value.trim();
-      const age = document.getElementById("age").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+  try {
+    const name = document.getElementById("name").value.trim();
+    const last_name = document.getElementById("last_name").value.trim();
+    const age = parseInt(document.getElementById("age").value, 10);
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-      if (!name || !last_name || !age || !email || !password) {
-        showError("registerError", "Please complete all required fields.");
-        return;
-      }
+    // Si es tutor
+    let profile;
+    if (mode === "tutor") {
+      const hour_price = parseFloat(document.getElementById("hourPrice").value);
+      const description = document.getElementById("description").value.trim();
 
-      let profile = {
-        mode,
+      // Días seleccionados
+      const selectedDays = [
+        ...document.querySelectorAll("input[name='days']:checked"),
+      ].map((i) => i.value);
+      const working_days = selectedDays.join(",");
+
+      const from = document.getElementById("timeFrom").value;
+      const to = document.getElementById("timeTo").value;
+
+      // Materias separadas por coma
+      const subjectsText = document.getElementById("subjects").value;
+      const subjects = subjectsText
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      profile = {
+        name,
+        last_name,
+        age,
+        email,
+        password,
+        hour_price,
+        description,
+        subjects,
+        working_days,
+        from,
+        to,
+      };
+    } else {
+      // Si es estudiante
+      profile = {
         name,
         last_name,
         age,
         email,
         password,
       };
-
-      if (mode === "tutor") {
-        const hourPrice = document.getElementById("hourPrice").value.trim();
-        const description = document.getElementById("description").value.trim();
-        const subjects = document.getElementById("subjects").value.trim();
-        const timeFrom = document.getElementById("timeFrom").value;
-        const timeTo = document.getElementById("timeTo").value;
-        const days = Array.from(
-          document.querySelectorAll('input[name="days"]:checked')
-        ).map((d) => d.value);
-
-        // Validate availability
-        availabilityError.classList.add("is-hidden");
-        if (days.length === 0) {
-          availabilityError.textContent =
-            "Please select at least one working day.";
-          availabilityError.classList.remove("is-hidden");
-          return;
-        }
-        if (!timeFrom || !timeTo || timeFrom >= timeTo) {
-          availabilityError.textContent =
-            "Please provide a valid time range (From must be earlier than To).";
-          availabilityError.classList.remove("is-hidden");
-          return;
-        }
-
-        profile = {
-          ...profile,
-          hourPrice: hourPrice ? Number(hourPrice) : null,
-          description,
-          subjects: subjects
-            ? subjects
-                .split(",")
-                .map((s) => s.trim())
-                .filter(Boolean)
-            : [],
-          availability: {
-            days,
-            timeFrom,
-            timeTo,
-          },
-        };
-      }
-
-      const url =
-        mode === "tutor"
-          ? "https://backend-1-x71e.onrender.com/registerB/registerTutor"
-          : "https://backend-1-x71e.onrender.com/registerB/registerStudent";
-
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(profile),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        alert("Successfully registered user");
-        navigate("login");
-      } else {
-        showError(
-          "registerError",
-          data.message || "Error registering user."
-        );
-      }
-    } catch (err) {
-      showError("registerError", "Server connection error.".err);
     }
-  });
+
+    console.log("📤 Sending register data:", profile);
+
+    const url =
+      mode === "tutor"
+        ? "https://backend-1-x71e.onrender.com/registerB/registerTutor"
+        : "https://backend-1-x71e.onrender.com/registerB/registerStudent";
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(profile),
+    });
+
+    const data = await res.json();
+    console.log("📥 Response:", data);
+
+    if (res.ok) {
+      alert("Successfully registered user");
+      navigate("login");
+    } else {
+      showError("registerError", data.error || data.message || "Error registering user.");
+    }
+  } catch (err) {
+    console.error("Error in register:", err);
+    showError("registerError", "Server connection error.");
+  }
+});
 
   function showError(id, msg) {
     const el = document.getElementById(id);
