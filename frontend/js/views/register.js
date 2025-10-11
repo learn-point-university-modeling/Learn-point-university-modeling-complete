@@ -155,21 +155,12 @@ export function initRegister(navigate) {
 registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-<<<<<<< HEAD
   try {
     const name = document.getElementById("name").value.trim();
     const last_name = document.getElementById("last_name").value.trim();
     const age = parseInt(document.getElementById("age").value, 10);
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-=======
-    try {
-      const name = document.getElementById("name").value.trim();
-      const last_name = document.getElementById("last_name").value.trim();
-      const age = document.getElementById("age").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
->>>>>>> 5a7467feefa5de2885a3d5b3acc9f0cbc61a0f0c
 
     // Si es tutor
     let profile;
@@ -215,72 +206,6 @@ registerForm.addEventListener("submit", async (e) => {
         email,
         password,
       };
-<<<<<<< HEAD
-=======
-
-      if (mode === "tutor") {
-        const hourPrice = document.getElementById("hourPrice").value.trim();
-        const description = document.getElementById("description").value.trim();
-        const subjects = document.getElementById("subjects").value.trim();
-        const timeFrom = document.getElementById("timeFrom").value;
-        const timeTo = document.getElementById("timeTo").value;
-        const days = Array.from(
-          document.querySelectorAll('input[name="days"]:checked')
-        ).map((d) => d.value);
-
-        availabilityError.classList.add("is-hidden");
-        if (days.length === 0) {
-          availabilityError.textContent =
-            "Please select at least one working day.";
-          availabilityError.classList.remove("is-hidden");
-          return;
-        }
-        if (!timeFrom || !timeTo || timeFrom >= timeTo) {
-          availabilityError.textContent =
-            "Please provide a valid time range (From must be earlier than To).";
-          availabilityError.classList.remove("is-hidden");
-          return;
-        }
-
-        profile = {
-          ...profile,
-          hourPrice: hourPrice ? Number(hourPrice) : null,
-          description,
-          subjects: subjects
-            ? subjects
-                .split(",")
-                .map((s) => s.trim())
-                .filter(Boolean)
-            : [],
-          availability: {
-            days,
-            timeFrom,
-            timeTo,
-          },
-        };
-      }
-
-      const url =
-        mode === "tutor"
-          ? "http://localhost:3000/registerB/registerTutor"
-          : "http://localhost:3000/registerB/registerStudent";
-
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(profile),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        alert("Successfully registered user");
-        navigate("login");
-      } else {
-        showError("registerError", data.error || "Error registering user.");
-      }
-    } catch (err) {
-      showError("registerError", "Server connection error.");
-      console.error(err);
->>>>>>> 5a7467feefa5de2885a3d5b3acc9f0cbc61a0f0c
     }
 
     console.log("📤 Sending register data:", profile);
