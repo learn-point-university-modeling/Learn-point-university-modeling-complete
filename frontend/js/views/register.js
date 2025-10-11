@@ -113,7 +113,6 @@ export function register() {
 }
 
 export function initRegister(navigate) {
-  // Lottie
   const regLottie = document.getElementById("registerLottie");
   if (regLottie) {
     lottie.loadAnimation({
@@ -157,7 +156,6 @@ export function initRegister(navigate) {
     e.preventDefault();
 
     try {
-      // Basic required fields always present
       const name = document.getElementById("name").value.trim();
       const last_name = document.getElementById("last_name").value.trim();
       const age = document.getElementById("age").value.trim();
@@ -188,7 +186,6 @@ export function initRegister(navigate) {
           document.querySelectorAll('input[name="days"]:checked')
         ).map((d) => d.value);
 
-        // Validate availability
         availabilityError.classList.add("is-hidden");
         if (days.length === 0) {
           availabilityError.textContent =
@@ -236,13 +233,11 @@ export function initRegister(navigate) {
         alert("Successfully registered user");
         navigate("login");
       } else {
-        showError(
-          "registerError",
-          data.message || "Error registering user."
-        );
+        showError("registerError", data.error || "Error registering user.");
       }
     } catch (err) {
-      showError("registerError", "Server connection error.".err);
+      showError("registerError", "Server connection error.");
+      console.error(err);
     }
   });
 

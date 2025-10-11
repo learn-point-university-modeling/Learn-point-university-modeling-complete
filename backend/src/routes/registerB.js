@@ -11,22 +11,24 @@ router.post("/registerTutor", async (req, res) => {
     age,
     email,
     password,
-    hour_price,
+    hourPrice,
     description,
     subjects,
-    working_days,
-    from,
-    to,
+    availability,
   } = req.body;
 
-  // Valid obligatories fields tutors
+  // Extraer datos internos del objeto availability (del frontend)
+  const working_days = availability?.days?.join(",") || null;
+  const from = availability?.timeFrom || null;
+  const to = availability?.timeTo || null;
+
   if (
     !name ||
     !last_name ||
     !age ||
     !email ||
     !password ||
-    !hour_price ||
+    !hourPrice ||
     !description ||
     !subjects ||
     !working_days ||
@@ -37,7 +39,6 @@ router.post("/registerTutor", async (req, res) => {
   }
 
   try {
-    // Valid if the email exists
     const [existing] = await pool.query("SELECT * FROM users WHERE email = ?", [
       email,
     ]);
@@ -45,27 +46,23 @@ router.post("/registerTutor", async (req, res) => {
       return res.status(400).json({ error: "The email already exists" });
     }
 
-    // Insert in the users table
     const [userResult] = await pool.query(
       "INSERT INTO users (name, last_name, age, email, password) VALUES (?, ?, ?, ?, ?)",
       [name, last_name, age, email, password]
     );
-    const userId = userResult.insertId; // get the id of users students
+    const userId = userResult.insertId;
 
-    // Insert in the tutors table
     const [tutorResult] = await pool.query(
       "INSERT INTO tutors (users_id, hour_price, description_tutor) VALUES (?, ?, ?)",
-      [userId, hour_price, description]
+      [userId, hourPrice, description]
     );
-    const tutorId = tutorResult.insertId; // get the id of users tutors
+    const tutorId = tutorResult.insertId;
 
-    // Insert availability tutors
     await pool.query(
       "INSERT INTO tutor_availability (tutors_id, days_availability, start_availability, end_availability) VALUES (?, ?, ?, ?)",
       [tutorId, working_days, from, to]
     );
 
-    // Insert subjects of the tutor
     if (Array.isArray(subjects)) {
       for (const subject of subjects) {
         await pool.query(
@@ -102,9 +99,8 @@ router.post("/registerStudent", async (req, res) => {
       "INSERT INTO users (name, last_name, age, email, password) VALUES (?, ?, ?, ?, ?)",
       [name, last_name, age, email, password]
     );
-    const userId = userResult.insertId; // get the id of users students
+    const userId = userResult.insertId;
 
-    // Insert in the students table
     await pool.query("INSERT INTO students (users_id) VALUES (?)", [userId]);
 
     res.status(201).json({ message: "Student registered successfully" });
