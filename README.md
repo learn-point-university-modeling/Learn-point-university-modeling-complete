@@ -100,7 +100,6 @@ cd LearnPoint-Integrative-Project
 
 **Student** 
 - sofia.python@student.com | 12345
-- anasofiapython@tutor.com | 5423
 
 **Tutor** 
 - david.js@tutor.com | 12345
