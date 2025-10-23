@@ -106,12 +106,12 @@ https://www.figma.com/proto/9M29y307KGA6lFVnSLK88w/Prototype?node-id=1-126&t=WT6
 ---
 
 ## 👥 Team Credits  
-- Juan Diego Murillo Rivas.
 - Santiago Restrepo Arismendy.
 - Vanessa Gomez Lopez.
+- Juan Diego Murillo Rivas.
  
 ---
 
 ## 📌 Version  
 
-- **Version 1.0.0** 
+- **Version 1.0.2** 
