@@ -15,7 +15,7 @@ export function login() {
       <div class="columns is-centered">
         <div class="column is-5">
           <div class="box has-text-centered">
-          <img src="./assets/images/logo.png" alt="LearnPoint logo" class="logo">
+            <img src="./assets/images/logo.png" alt="LearnPoint logo" class="logo" />
             <h1 id="loginTitle" class="title has-text-centered mb-5">Welcome back</h1>
             <h4 id="loginSubtitle" class="subtitle has-text-centered mb-5">Select your role</h4>
 
@@ -34,7 +34,7 @@ export function login() {
               <form id="loginForm">
                 <div class="field">
                   <div class="control has-icons-left">
-                    <input type="text" class="input" id="loginEmail" placeholder="Email" required />
+                    <input type="email" class="input" id="loginEmail" placeholder="Email" required />
                     <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
                   </div>
                 </div>
@@ -46,7 +46,7 @@ export function login() {
                   </div>
                 </div>
 
-                <div id="loginError" class="notification is-danger is-hidden">Please select a role first</div>
+                <div id="loginError" class="notification is-danger is-hidden"></div>
 
                 <div class="field">
                   <button type="submit" class="button is-fullwidth" id="loginBtn">
@@ -79,24 +79,27 @@ export function initLogin(navigate) {
   const loginTitle = document.getElementById("loginTitle");
   const loginError = document.getElementById("loginError");
 
-  // Preselect from register preference if any
   const pref = localStorage.getItem("lp_pref_role");
   if (pref === "tutor") btnTutor.click();
   if (pref === "student") btnStudent.click();
 
   btnTutor.addEventListener("click", () => {
     userType = "tutor";
-    loginBox.className = "box tutor-mode";
-    loginBtn.className = "button is-fullwidth login-btn-tutor";
-    loginTitle.className = "title has-text-centered mb-5 title-tutor";
+    loginBox.classList.remove("student-mode");
+    loginBox.classList.add("tutor-mode");
+    loginBtn.classList.remove("login-btn-student");
+    loginBtn.classList.add("login-btn-tutor");
+    loginTitle.textContent = "Tutor Login";
     loginError.classList.add("is-hidden");
   });
 
   btnStudent.addEventListener("click", () => {
     userType = "student";
-    loginBox.className = "box student-mode";
-    loginBtn.className = "button is-fullwidth login-btn-student";
-    loginTitle.className = "title has-text-centered mb-5 title-student";
+    loginBox.classList.remove("tutor-mode");
+    loginBox.classList.add("student-mode");
+    loginBtn.classList.remove("login-btn-tutor");
+    loginBtn.classList.add("login-btn-student");
+    loginTitle.textContent = "Student Login";
     loginError.classList.add("is-hidden");
   });
 
@@ -123,24 +126,22 @@ export function initLogin(navigate) {
 
       if (!response.ok) throw new Error(data.message || "Login failed");
 
-      // Here we validate that the role matches the selected button
       if (data.role !== userType) {
-        throw new Error(
-          `This user is registered as ${data.role}, not ${userType}`
-        );
+        throw new Error(`This user is registered as ${data.role}, not ${userType}`);
       }
 
-      localStorage.setItem("lp_userId", data.user.id); // ID real
-      localStorage.setItem("lp_username", data.user.name); // opcional
-      localStorage.setItem("lp_role", data.role); // tutor/student
+      localStorage.setItem("lp_userId", data.user.id);
+      localStorage.setItem("lp_username", data.user.name);
+      localStorage.setItem("lp_role", data.role);
 
-      // Save info and redirect
       auth.login({
-        ...data.user, // Includes id, name, last_name, email, studentId, tutorId
-        role: data.role, // We explicitly added the role
+        ...data.user, // id, name, last_name, email, etc.
+        role: data.role,
       });
+
       navigate("dashboard");
     } catch (err) {
+      console.error("Login error:", err);
       loginError.textContent = err.message;
       loginError.classList.remove("is-hidden");
     }
