@@ -6,14 +6,6 @@ The project was developed as an **integrative academic work**, combining **front
 
 ---
 
-## 🌍 Deployment  
-
-You can access the deployed project here:  
-- 👉 [Backend](link) 
-
-- 👉 [Frontend](Link) 
----
-
 ## ⚙️ How to Run the Project  
 
 ### 🔹 1. Clone the repository  
